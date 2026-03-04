@@ -1,0 +1,5 @@
+{
+  "name": "Ristorante Da Michi",
+  "description": "Authentic Italian restaurant and pizzeria website with an elegant, responsive design.",
+  "requestFramePermissions": ["geolocation"]
+}
