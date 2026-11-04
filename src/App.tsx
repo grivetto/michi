@@ -610,12 +610,33 @@ const Footer = ({ lang }: { lang: Language }) => {
   );
 };
 
+function getInitialLanguage(): Language {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang')?.toLowerCase();
+    if (urlLang === 'it' || urlLang === 'en' || urlLang === 'es' || urlLang === 'th') {
+      return urlLang as Language;
+    }
+    const saved = localStorage.getItem('michi_lang')?.toLowerCase();
+    if (saved === 'it' || saved === 'en' || saved === 'es' || saved === 'th') {
+      return saved as Language;
+    }
+  }
+  return 'it';
+}
+
 export default function App() {
-  const [lang, setLang] = useState<Language>('it');
+  const [lang, setLang] = useState<Language>(getInitialLanguage);
 
   const toggleLanguage = () => {
     const order: Language[] = ['it', 'en', 'es', 'th'];
-    setLang((prev) => order[(order.indexOf(prev) + 1) % order.length]);
+    setLang((prev) => {
+      const next = order[(order.indexOf(prev) + 1) % order.length];
+      try {
+        localStorage.setItem('michi_lang', next);
+      } catch {}
+      return next;
+    });
   };
 
   return (
